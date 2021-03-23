@@ -6,6 +6,7 @@ import androidx.webkit.WebViewAssetLoader;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -29,15 +30,9 @@ public class MainActivity extends AppCompatActivity {
         final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .build();
+        NaughtyWebViewClient client = new NaughtyWebViewClient(assetLoader);
 
-        myWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            @RequiresApi(21)
-            public WebResourceResponse shouldInterceptRequest(WebView view,
-                                                              WebResourceRequest request) {
-                return assetLoader.shouldInterceptRequest(request.getUrl());
-            }
-        });
+        myWebView.setWebViewClient(client);
 
         setContentView(myWebView);
         // add tasks here
