@@ -13,7 +13,28 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class MainActivity extends AppCompatActivity {
+
+    private String readResource(int id) {
+        InputStream is = this.getResources().openRawResource(id);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        try {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            br.close();
+        } catch (IOException e) {
+
+        }
+        return sb.toString();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -26,22 +47,16 @@ public class MainActivity extends AppCompatActivity {
         myWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         myWebView.getSettings().setDomStorageEnabled(true);
 
-        // add implementation "androidx.webkit:webkit:1.2.0" to build.gradle
-        final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
-                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
-                .build();
-        NaughtyWebViewClient client = new NaughtyWebViewClient(assetLoader);
-        client.addToBlackList("stuff.coral.coralproject.net");
-
-        myWebView.setWebViewClient(client);
-
         setContentView(myWebView);
         // add tasks here
         AndroidBridge bridge = new AndroidBridge(myWebView);
 //        bridge.addFunction("emails", new GetEmails());
 //        bridge.addFunction("share", new ShareImage(this));
         myWebView.addJavascriptInterface(bridge, "androidBridge");
-        myWebView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html");
+        myWebView.loadUrl("https://www.stuff.co.nz/business/300259522/housing-policy-what-the-changes-mean-for-homeowners-investors-firsthome-buyers-renters-and-bach-owners#comments");
+
+        myWebView.evaluateJavascript(readResource(R.raw.htmx), null);
+        myWebView.evaluateJavascript(readResource(R.raw.android), null);
     }
 
 }
