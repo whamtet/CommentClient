@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .build();
         NaughtyWebViewClient client = new NaughtyWebViewClient(assetLoader);
+        client.addToBlackList("stuff.coral.coralproject.net");
 
         myWebView.setWebViewClient(client);
 
