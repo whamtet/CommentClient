@@ -1,8 +1,11 @@
 package com.example.commentclient;
 
+import android.os.Build;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -31,6 +34,7 @@ public class AndroidBridge {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @JavascriptInterface
     public void invoke(String fName, String cb, String arg) {
         Function<String, String> f = functions.get(fName);
